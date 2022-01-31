@@ -3,7 +3,7 @@
 **Author Name**: Motasem alkilani
 
 ## WRRC
-<img href="Whiteboard.png>
+<img src="Whiteboard.png>
 
 ## Overview
 
