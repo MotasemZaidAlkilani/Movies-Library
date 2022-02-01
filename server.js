@@ -1,28 +1,34 @@
 'use strict'
 require('dotenv').config();
 const express=require('express');
+const pg=require('pg');
 const cors=require('cors');
 const axios=require('axios');
 const data=require('./Movie Data/data.json');
 
+const client=new pg.Client(process.env.database_Url);
 const server=express();
 server.use(cors());
-
+server.use(express.json());
 server.get('/',Movie_handle_data);
 server.get('/favorite',favorite_page);
 server.get('/trending',getDataFromApi);
 server.get('/search',search_Movie_name);
-server.get('*',page_not_found);
+server.get('/getMovie',getMovie);
+server.post('/addMovie',addMovie);
 
 server.use(server_error);
-
+server.use('*',page_not_found);
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
 let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=The&page=2&number=2`;
 
+client.connect().then(()=>{
 server.listen(port,()=>{
 console.log("worked");
-});
+})
+})
+
 function Movie_Data_From_Api(id,title,release_date,poster_path,overview){
     this.id=id;
     this.title=title;
@@ -38,6 +44,33 @@ function Movie_data(title,poster_path,overview){
     this.poster_path=poster_path;
     this.overview=overview;
 }
+function addMovie(request,response){
+    const movie=request.body;
+    let sql=`INSERT INTO movie_table(id,title,release_date,poster_path,overview) VALUES ($1,$2,$3,$4,$5) RETURNING *;`
+    let values=[movie.id,movie.title,movie.release_date,movie.poster_path,movie.overview];
+    client.query(sql,values).then(data =>{
+        console.log(data);
+     response.status(200).json(data.rows);
+    }).catch(err=>{
+        server_error(err,request,response);
+    })
+}
+function getMovie(request,response){
+    let sql=`SELECT * FROM movie_table;`;
+    client.query(sql).then(data=>{
+        response.status(200).json(data.rows);
+
+    }).catch(err=>{
+        server_error(err,request,response);
+    })
+}
+
+
+
+
+
+
+
 function getDataFromApi(request,response){
     axios.get(url).then((res)=>{ 
      let obj=new Movie_Data_From_Api(res.data.id,res.data.title,res.data.release_date,res.data.poster_path,res.data.overview); 
@@ -61,9 +94,16 @@ function Movie_handle_data(request,respone){
   let obj=new Movie_data(data.title,data.poster_path,data.overview);
    return respone.status(200).send(obj);
 }
+
+
+
 function favorite_page(req,res){
     return res.status(203).send("Welcome to Favorite Page");
 }
+
+
+
+
 function server_error(error,request,reponse){
    const err={
        status:500,
