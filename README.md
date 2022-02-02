@@ -21,9 +21,10 @@ if u have all the instaltion right
 -now we have page that have trends movies ,
 and there other page show movies names.
 -ability to insert data to database and get them .
+-ability to delete or update data from database.
 
 -I dont have question for this task.
 
 
 
--this task took me alot compared to what I expected.
+-this task is easy.
