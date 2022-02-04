@@ -25,6 +25,7 @@ server.use(server_error);
 server.use('*',page_not_found);
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
+let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=The&page=2&number=2`;
 
 
 client.connect().then(()=>{
@@ -55,6 +56,9 @@ function addMovie(request,response){
     }).catch(err=>{
         server_error(err,request,response);
     })
+}
+function movie_name(original_title){
+    this.original_title=original_title;
 }
 function getMovie(request,response){
     let id=request.params.id;
