@@ -7,7 +7,7 @@ const axios=require('axios');
 const data=require('./Movie Data/data.json');
 
 const client = new pg.Client(
-    process.env.DATABASE_URL);
+    process.env.database_Url);
    
 const server=express();
 server.use(cors());
