@@ -4,18 +4,18 @@ const express=require('express');
 const pg=require('pg');
 const cors=require('cors');
 const axios=require('axios');
-// const data=require('./Movie Data/data.json');
+const data=require('./Movie Data/data.json');
 
 const client=new pg.Client(process.env.database_Url);
 const server=express();
 server.use(cors());
 server.use(express.json());
-// server.get('/',Movie_handle_data);
-// server.get('/favorite',favorite_page);
-// server.get('/trending',getDataFromApi);
-// server.get('/search',search_Movie_name);
+server.get('/',Movie_handle_data);
+server.get('/favorite',favorite_page);
+server.get('/trending',getDataFromApi);
+server.get('/search',search_Movie_name);
 server.put('/getMovie/:id',getMovie);
-// server.post('/addMovie',addMovie);
+server.post('/addMovie',addMovie);
 server.put('/UPDATE/:id',updateMovie);
 server.put('/DELETE/:id',deleteMovie);
 
@@ -31,29 +31,29 @@ console.log("worked");
 })
 })
 
-// function Movie_Data_From_Api(id,title,release_date,poster_path,overview){
-//     this.id=id;
-//     this.title=title;
-//     this.release_date=release_date;
-//     this.poster_path=poster_path;
-//     this.overview=overview;
-// }
+function Movie_Data_From_Api(id,title,release_date,poster_path,overview){
+    this.id=id;
+    this.title=title;
+    this.release_date=release_date;
+    this.poster_path=poster_path;
+    this.overview=overview;
+}
 
-// function Movie_data(title,poster_path,overview){
-//     this.title=title;
-//     this.poster_path=poster_path;
-//     this.overview=overview;
-// }
-// function addMovie(request,response){
-//     const movie=request.body;
-//     let sql=`INSERT INTO movie_table(id,title,release_date,poster_path,overview) VALUES ($1,$2,$3,$4,$5) RETURNING *;`
-//     let values=[movie.id,movie.title,movie.release_date,movie.poster_path,movie.overview];
-//     client.query(sql,values).then(data =>{
-//      response.status(200).json(data.rows);
-//     }).catch(err=>{
-//         server_error(err,request,response);
-//     })
-// }
+function Movie_data(title,poster_path,overview){
+    this.title=title;
+    this.poster_path=poster_path;
+    this.overview=overview;
+}
+function addMovie(request,response){
+    const movie=request.body;
+    let sql=`INSERT INTO movie_table(id,title,release_date,poster_path,overview) VALUES ($1,$2,$3,$4,$5) RETURNING *;`
+    let values=[movie.id,movie.title,movie.release_date,movie.poster_path,movie.overview];
+    client.query(sql,values).then(data =>{
+     response.status(200).json(data.rows);
+    }).catch(err=>{
+        server_error(err,request,response);
+    })
+}
 function getMovie(request,response){
     let id=request.params.id;
     console.log(id);
@@ -92,35 +92,35 @@ let id=request.params.id;
 
 
 
-// function getDataFromApi(request,response){
-//     axios.get(url).then((res)=>{ 
-//      let obj=new Movie_Data_From_Api(res.data.id,res.data.title,res.data.release_date,res.data.poster_path,res.data.overview); 
+function getDataFromApi(request,response){
+    axios.get(url).then((res)=>{ 
+     let obj=new Movie_Data_From_Api(res.data.id,res.data.title,res.data.release_date,res.data.poster_path,res.data.overview); 
      
-//      return response.status(200).json(obj);  
-//     }).catch((err)=>{
-//        server_error(err,request,response);
-//     })
-// }
-// function search_Movie_name(request,respone){
-//  axios.get(url_for_search).then((res)=>{
-//      let result=res.data.results.map(value=>{
-//      let obj=new movie_name(value.original_title);
-//      return obj;
-//     })
-//      respone.status(200).json(result);
-//  })
-// }
+     return response.status(200).json(obj);  
+    }).catch((err)=>{
+       server_error(err,request,response);
+    })
+}
+function search_Movie_name(request,respone){
+ axios.get(url_for_search).then((res)=>{
+     let result=res.data.results.map(value=>{
+     let obj=new movie_name(value.original_title);
+     return obj;
+    })
+     respone.status(200).json(result);
+ })
+}
 
-// function Movie_handle_data(request,respone){
-//   let obj=new Movie_data(data.title,data.poster_path,data.overview);
-//    return respone.status(200).send(obj);
-// }
+function Movie_handle_data(request,respone){
+  let obj=new Movie_data(data.title,data.poster_path,data.overview);
+   return respone.status(200).send(obj);
+}
 
 
 
-// function favorite_page(req,res){
-//     return res.status(203).send("Welcome to Favorite Page");
-// }
+function favorite_page(req,res){
+    return res.status(203).send("Welcome to Favorite Page");
+}
 
 
 
