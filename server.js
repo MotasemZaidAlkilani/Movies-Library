@@ -5,7 +5,7 @@ const pg=require('pg');
 const cors=require('cors');
 const axios=require('axios');
 const data=require('./Movie Data/data.json');
-
+const APIKEY=process.env.APIKEY;
 const client = new pg.Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
