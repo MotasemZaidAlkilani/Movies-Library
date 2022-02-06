@@ -14,7 +14,8 @@ server.get('/',Movie_handle_data);
 server.get('/favorite',favorite_page);
 server.get('/trending',getDataFromApi);
 server.get('/search',search_Movie_name);
-server.put('/getMovie/:id',getMovie);
+server.put('/getMovieById/:id',getMovieById);
+server.get('/getMovie',getMovie);
 server.post('/addMovie',addMovie);
 server.put('/UPDATE/:id',updateMovie);
 server.put('/DELETE/:id',deleteMovie);
@@ -59,8 +60,16 @@ function addMovie(request,response){
     })
 }
 function getMovie(request,response){
+    let sql=`SELECT * FROM movie_table`;
+    client.query(sql).then(data=>{
+        response.status(200).json(data.rows);
+
+    }).catch(err=>{
+        server_error(err,request,response);
+    })
+}
+function getMovieById(request,response){
     let id=request.params.id;
-    console.log(id);
     let sql=`SELECT * FROM movie_table WHERE id=${id};`;
     client.query(sql).then(data=>{
         response.status(200).json(data.rows);
