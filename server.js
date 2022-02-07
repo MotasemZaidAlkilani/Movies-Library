@@ -5,11 +5,13 @@ const pg=require('pg');
 const cors=require('cors');
 const axios=require('axios');
 const data=require('./Movie Data/data.json');
+
 const APIKEY=process.env.APIKEY;
 const client = new pg.Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
    
+
 const server=express();
 server.use(cors());
 server.use(express.json());
@@ -24,6 +26,7 @@ server.put('/DELETE/:id',deleteMovie);
 
 server.use(server_error);
 server.use('*',page_not_found);
+
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
 let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=The&page=2&number=2`;
@@ -48,6 +51,7 @@ function Movie_data(title,poster_path,overview){
     this.poster_path=poster_path;
     this.overview=overview;
 }
+
 function addMovie(request,response){
     const movie=request.body;
     let sql=`INSERT INTO movie_table(id,title,release_date,poster_path,overview) VALUES ($1,$2,$3,$4,$5) RETURNING *;`
@@ -58,9 +62,12 @@ function addMovie(request,response){
         server_error(err,request,response);
     })
 }
+
+
 function movie_name(original_title){
     this.original_title=original_title;
 }
+
 function getMovie(request,response){
     let id=request.params.id;
     console.log(id);
@@ -93,12 +100,6 @@ let id=request.params.id;
  })
 }
 
-
-
-
-
-
-
 function getDataFromApi(request,response){
     axios.get(url).then((res)=>{ 
      let obj=new Movie_Data_From_Api(res.data.id,res.data.title,res.data.release_date,res.data.poster_path,res.data.overview); 
@@ -118,6 +119,7 @@ function search_Movie_name(request,respone){
  })
 }
 
+
 function Movie_handle_data(request,respone){
   let obj=new Movie_data(data.title,data.poster_path,data.overview);
    return respone.status(200).send(obj);
@@ -131,6 +133,14 @@ function favorite_page(req,res){
 
 
 
+function Movie_handle_data(request,respone){
+  let obj=new Movie_data(data.title,data.poster_path,data.overview);
+   return respone.status(200).send(obj);
+}
+
+function favorite_page(req,res){
+    return res.status(203).send("Welcome to Favorite Page");
+}
 
 function server_error(error,request,reponse){
    const err={
