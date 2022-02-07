@@ -3,13 +3,13 @@
 **Author Name**: Motasem alkilani
 
 ## WRRC
-Add an image of your WRRC here
+<img src="Whiteboard.png">
 
 ## Overview
 
 ## Getting Started
 if u have all the instaltion right
-1-run the ubuntut 
+1-run the ubuntut
 2-open the requied folder project
 3-enter npm start
 4-run the browser
@@ -17,12 +17,14 @@ if u have all the instaltion right
 6-done.
 
 ## Project Features
-u can show the page through localhost url and can show error from server or client.
+-u can show the page through localhost url and can show error from server or client.
+-now we have page that have trends movies ,
+and there other page show movies names.
+-ability to insert data to database and get them .
+-ability to delete or update data from database.
+
+-I dont have question for this task.
 
 
 
-#I dont know what wrrc means, so I didnt answer it.
-I searched for it , and nothing found.
-
-
-#this task is easy compared to what I expected.
+-this task is easy.
