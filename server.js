@@ -11,6 +11,8 @@ server.use(cors());
 server.get('/',Movie_handle_data);
 server.get('/favorite',favorite_page);
 server.get('/trending',getDataFromApi);
+server.get('/firstChoice',firstChoice);
+server.get('/secondChoice',secondChoice);
 server.get('/search',search_Movie_name);
 server.get('*',page_not_found);
 
@@ -19,10 +21,31 @@ server.use(server_error);
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
 let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=The&page=2&number=2`;
+let url_first_choice=`https://api.themoviedb.org/3/genre/tv/list?api_key=${process.env.APIKEY}&language=en-US`;
+let utl_second_choice=`https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.APIKEY}&language=en-US`;
 
 server.listen(port,()=>{
 console.log("worked");
 });
+function firstChoice(request,response){
+    let array=[];
+    axios.get(url_first_choice).then((res)=>{ 
+        console.log(res);
+    array.push(res.data.genres);
+        return response.status(200).json(array);
+    }).catch(err=>{
+        server_error(err,request,response);
+    })
+}
+function secondChoice(request,response){
+    let array=[];
+    axios.get(utl_second_choice).then((res)=>{ 
+        array.push(res.data.genres);
+        return response.status(200).json(array);
+    }).catch(err=>{
+        server_error(err,request,response);
+    })
+}
 function Movie_Data_From_Api(id,title,release_date,poster_path,overview){
     this.id=id;
     this.title=title;
