@@ -8,7 +8,7 @@ server.use(cors());
 server.get('/',Movie_handle_data);
 server.get('/favorite',favorite_page);
 server.get('/505',server_error);
-server.get('/404',page_not_found);
+server.get('/*',page_not_found);
 server.listen(3000,()=>{
 console.log("hi");
 });
@@ -32,5 +32,5 @@ function server_error(request,reponse){
     return reponse.status(500).send("Server Error");
 }
 function page_not_found(request,reponse){
-    return reponse.status(500).send("page not found error");
+    return reponse.status(400).send("page not found error");
 }
