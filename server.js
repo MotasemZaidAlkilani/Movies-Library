@@ -32,7 +32,7 @@ server.use('*',page_not_found);
 
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
-let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=The&page=2&number=2`;
+let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=Jack+Reacher`;
 let url_first_choice=`https://api.themoviedb.org/3/genre/tv/list?api_key=${process.env.APIKEY}&language=en-US`;
 let utl_second_choice=`https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.APIKEY}&language=en-US`;
 
@@ -145,13 +145,13 @@ function getDataFromApi(request,response){
     })
 }
 function search_Movie_name(request,respone){
+    let array=[];
  axios.get(url_for_search).then((res)=>{
-     let result=res.data.results.map(value=>{
-     let obj=new movie_name(value.original_title);
-     return obj;
+     array.push(res.data.results);
+     respone.status(200).json(array);
     })
-     respone.status(200).json(result);
- })
+    
+ 
 }
 
 
