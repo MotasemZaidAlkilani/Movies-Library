@@ -17,6 +17,10 @@ server.use(cors());
 server.use(express.json());
 server.get('/',Movie_handle_data);
 server.get('/favorite',favorite_page);
+
+server.get('/505',server_error);
+server.get('/*',page_not_found);
+
 server.get('/trending',getDataFromApi);
 server.get('/firstChoice',firstChoice);
 server.get('/secondChoice',secondChoice);
@@ -28,7 +32,6 @@ server.put('/UPDATE/:id',updateMovie);
 server.put('/DELETE/:id',deleteMovie);
 
 server.use(server_error);
-server.use('*',page_not_found);
 
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
@@ -72,6 +75,7 @@ function Movie_Data_From_Api(id,title,release_date,poster_path,overview){
     this.poster_path=poster_path;
     this.overview=overview;
 }
+
 
 function Movie_data(title,poster_path,overview){
     this.title=title;
@@ -187,4 +191,4 @@ function server_error(error,request,reponse){
 
 function page_not_found(request,reponse){
     return reponse.status(400).send("page not found error");
-}
+
