@@ -6,7 +6,12 @@ const cors=require('cors');
 const axios=require('axios');
 const data=require('./Movie Data/data.json');
 
-const client=new pg.Client(process.env.DATABASE_URL);
+const APIKEY=process.env.APIKEY;
+const client = new pg.Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+   
+
 const server=express();
 server.use(cors());
 server.use(express.json());
@@ -24,6 +29,7 @@ server.use('*',page_not_found);
 
 const port=process.env.PORT;
 let url=`https://api.themoviedb.org/3/movie/550?api_key=${process.env.APIKEY}`;
+let url_for_search=`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&language=en-US&query=The&page=2&number=2`;
 
 
 client.connect().then(()=>{
@@ -46,8 +52,6 @@ function Movie_data(title,poster_path,overview){
     this.overview=overview;
 }
 
-
-
 function addMovie(request,response){
     const movie=request.body;
     let sql=`INSERT INTO movie_table(id,title,release_date,poster_path,overview) VALUES ($1,$2,$3,$4,$5) RETURNING *;`
@@ -58,6 +62,12 @@ function addMovie(request,response){
         server_error(err,request,response);
     })
 }
+
+
+function movie_name(original_title){
+    this.original_title=original_title;
+}
+
 function getMovie(request,response){
     let id=request.params.id;
     console.log(id);
@@ -108,6 +118,20 @@ function search_Movie_name(request,respone){
      respone.status(200).json(result);
  })
 }
+
+
+function Movie_handle_data(request,respone){
+  let obj=new Movie_data(data.title,data.poster_path,data.overview);
+   return respone.status(200).send(obj);
+}
+
+
+
+function favorite_page(req,res){
+    return res.status(203).send("Welcome to Favorite Page");
+}
+
+
 
 function Movie_handle_data(request,respone){
   let obj=new Movie_data(data.title,data.poster_path,data.overview);
